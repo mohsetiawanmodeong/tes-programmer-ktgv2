@@ -13,6 +13,7 @@
     <!-- costum css -->
     <link rel="stylesheet" href="style.css">
     <title>Senggol Api - Daftar</title>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 
 <body>
@@ -20,35 +21,92 @@
         <!-- justify-content-center untuk mengatur posisi form agar berada di tengah-tengah -->
         <section class="row justify-content-center">
             <section class="col-12 col-sm-6 col-md-4">
-                <form class="form-container">
+                <form class="form-container" method="post" id="daftarForm">
                     <h4 class="text-center font-weight-bold"> Senggol Api - Daftar </h4>
                     <h6 class="text-center"> Tes Programmer Ktg v2 </h6>
                     <br>
                     <div class="form-group">
-                        <label for="name">NIK</label>
-                        <input type="text" class="form-control" id="name" placeholder="Masukkan NIK">
+                        <label for="nik">NIK</label>
+                        <input type="number" id="nik" class="form-control" placeholder="Masukkan NIK">
                     </div>
                     <div class="form-group">
-                        <label for="name">Nama</label>
-                        <input type="text" class="form-control" id="username" placeholder="Masukkan Nama">
+                        <label for="nama">Nama</label>
+                        <input type="text" id="nama" class="form-control" placeholder="Masukkan Nama">
                     </div>
                     <div class="form-group">
-                        <label for="name">Alamat</label>
-                        <input type="text" class="form-control" id="username" placeholder="Masukkan Alamat">
+                        <label for="alamat">Alamat</label>
+                        <input type="text" id="alamat" class="form-control" placeholder="Masukkan Alamat">
                     </div>
                     <div class="form-group">
-                        <label for="InputEmail">Surel</label>
-                        <input type="email" class="form-control" id="InputEmail" aria-describeby="emailHelp"
-                            placeholder="Masukkan Surel">
+                        <label for="surel">Surel</label>
+                        <input type="text" id="surel" class="form-control" placeholder="Masukkan Surel">
                     </div>
                     <button type="submit" class="mt-4 btn btn-primary btn-block">Daftar</button>
                     <!-- <div class="form-footer mt-2">
                         <p> Sudah punya account? <a href="#">Login</a></p>
                     </div> -->
                 </form>
+
+                <div id="results">
+
+                </div>
+
             </section>
         </section>
     </section>
+
+    <script>
+        var daftarForm = document.getElementById('daftarForm');
+
+        daftarForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var nik = document.getElementById('nik').value;
+            var nama = document.getElementById('nama').value;
+            var alamat = document.getElementById('alamat').value;
+            var surel = document.getElementById('surel').value;
+
+            // const formData = new FormData(this);
+            // const searchParams = new URLSearchParams();
+
+            // for (const pair of formData) {
+            //     searchParams.append(pair[0], pair[1]);
+            // }
+
+            fetch("http://10.10.24.141/senggol/api/index.php/daftar", {
+                    method: 'POST',
+                    // body: searchParams
+                    body: JSON.stringify({
+                        nik: nik,
+                        nama: nama,
+                        alamat: alamat,
+                        surel: surel
+                    }),
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    }
+                })
+                .then(function (response) {
+                    return response.json();
+                    // }).then(function (text) {
+                    //     console.log(text);
+                    // }).catch(function (error) {
+                    //     console.error(error);
+                    // })
+                })
+                .then(function (data) {
+                    console.log(data)
+                    var result = document.getElementById('results')
+
+                    result.innerHTML = `
+                                        <p>Cek NIK ${data.nik}</p>
+                                        <p>Cek Nama ${data.nama}</p>
+                                        <p>Cek Alamat ${data.alamat}</p>
+                                        <p>Cek Surel ${data.surel}</p>
+                                        `
+                })
+        });
+    </script>
 
     <!-- Bootstrap requirement jQuery pada posisi pertama, kemudian Popper.js, danyang terakhit Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
