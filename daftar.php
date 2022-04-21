@@ -1,4 +1,4 @@
 <?php
 
-// Menguji login
+// Menguji 
 var_dump($_POST);
